@@ -48,6 +48,7 @@
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Ticket Id</th>
+                <th scope="col">Agency Name</th>
                 <th scope="col">Bus No</th>
                 <th scope="col">Source</th>
                 <th scope="col">Destination</th>
@@ -61,13 +62,14 @@
             <tbody>
               <% for(let i=0;i<bus_result.length; i++){ %>
               <tr>
-                <th scope="col"><%= bus_result[i].ticket_id %></th>
-                <th scope="col"><%= bus_result[i].bus_number %></th>
-                <th scope="col"><%= bus_result[i].source %></th>
-                <th scope="col"><%= bus_result[i].destination %></th>
-                <th scope="col"><%= bus_result[i].date_of_booking %></th>
-                <th scope="col"><%= bus_result[i].no_of_people %></th>
-                <th scope="col"><%= bus_result[i].total_price %></th>
+                <th><%= bus_result[i].ticket_id %></th>
+                <th></th>
+                <th><%= bus_result[i].bus_number %></th>
+                <th><%= bus_result[i].source %></th>
+                <th><%= bus_result[i].destination %></th>
+                <th><%= bus_result[i].date_of_booking %></th>
+                <th><%= bus_result[i].no_of_people %></th>
+                <th><%= bus_result[i].total_price %></th>
               </tr>
               <% } %>
             </tbody>
@@ -95,14 +97,14 @@
             <tbody>
               <% for(let i=0;i<tour_result.length; i++){ %>
               <tr>
-                <th scope="col"><%= tour_result[i].ticket_id %></th>
-                <th scope="col"><%= tour_result[i].tour_id %></th>
-                <th scope="col"><%= tour_result[i].source %></th>
-                <th scope="col"><%= tour_result[i].no_of_days %></th>
-                <th scope="col"><%= tour_result[i].no_of_nights %></th>
-                <th scope="col"><%= tour_result[i].date_of_booking %></th>
-                <th scope="col"><%= tour_result[i].no_of_people %></th>
-                <th scope="col"><%= tour_result[i].total_price %></th>
+                <th><%= tour_result[i].ticket_id %></th>
+                <th><%= tour_result[i].tour_id %></th>
+                <th><%= tour_result[i].source %></th>
+                <th><%= tour_result[i].no_of_days %></th>
+                <th><%= tour_result[i].no_of_nights %></th>
+                <th><%= tour_result[i].date_of_booking %></th>
+                <th><%= tour_result[i].no_of_people %></th>
+                <th><%= tour_result[i].total_price %></th>
               </tr>
               <% } %>
             </tbody>
