@@ -71,7 +71,7 @@
             <div class="row">
               
               
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default" value="<%= source %>">Source</span>
@@ -81,20 +81,38 @@
 
               </div>
 
-              <div class=" col-md-4" id="icons">
+              <div class=" col-md-3" id="icons">
                 <div class="icon-group">
-                  <i class="fa fa-arrow-circle-left" style="font-size:44px;"></i>
-                  <i class="fa fa-arrow-circle-right" style="font-size:44px;"></i>
+                  <i class="fa fa-arrow-circle-left" style="font-size:30px;"></i>
+                  <i class="fa fa-arrow-circle-right" style="font-size:30px;"></i>
 
                 </div>
               </div>
 
-              <div class=" col-md-4">
+              <div class=" col-md-3">
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default" value="<%= destination %>">Destination</span>
                   </div>
                   <input autocomplete="false" type="text" name="destination" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                </div>
+              </div>
+
+              <div class=" col-md-3">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default" value="<%= destination %>">Agency</span>
+                  </div>
+                  <!-- <input autocomplete="false" type="text" name="agency" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"> -->
+                  <label for="exampleFormControlSelect1"></label>
+                  <select class="form-control" id="agency" name="agency">
+                    <option>Choose</option>
+                    <option>Global</option>
+                    <option>Srs</option>
+                    <option>Vrl</option>
+                    <option>Cauvery</option>
+                    <option>Orange</option>
+                  </select>
                 </div>
               </div>
 
@@ -116,6 +134,7 @@
         <table class="table table-bordered">
           <thead class="table-dark ">
             <tr>
+              <th scope="col">Agency</th>
               <th scope="col">Bus Number</th>
               <th scope="col">Source</th>
               <th scope="col">Departure Time</th>
@@ -132,16 +151,17 @@
           <tbody>
             <% for(let i=0;i<data.length;i++){ %>
               <tr class="table-secondary">
-                <th scope="col"><%= data[i].bus_number %></th>
-                <th scope="col"><%= data[i].source %></th>
-                <th scope="col"><%= data[i].departure_time %></th>
-                <th scope="col"><%= data[i].destination %></th>
-                <th scope="col"><%= data[i].arrival_time %></th>
-                <th scope="col"><%= data[i].fare %></th>
-                <th scope="col"><%= data[i].agency_id %></th>
-                <th scope="col"><%= data[i].seats_available %></th>
+                <th></th>
+                <th><%= data[i].bus_number %></th>
+                <th><%= data[i].source %></th>
+                <th><%= data[i].departure_time %></th>
+                <th><%= data[i].destination %></th>
+                <th><%= data[i].arrival_time %></th>
+                <th><%= data[i].fare %></th>
+                <th><%= data[i].agency_id %></th>
+                <th><%= data[i].seats_available %></th>
                 <form action="/bus_booking/<%= data[i].bus_number %>" method="POST">
-                  <th scope="col">
+                  <th>
                     <button id="submit" class="btn btn-sm btn-primary" type="submit">Book Ticket</button>
                   </th>
                 </form>

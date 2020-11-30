@@ -15,7 +15,7 @@ const app = express();
 var data, tours;
 var userData;
 // var source, destination;
-var source, destination;
+var source, destination, agency;
 //message;
 var message;
 
@@ -274,7 +274,7 @@ app.post("/addBus", (req, res) => {
 // Add new tour to the tour table
 
 app.post("/addTours", (req, res) => {
-    const {from, placeIncluded, description, image, noOfDays, noOfNights, price, seatsAvailable} = req.body;
+    const {from, placeIncluded, description, image, noOfDays, noOfNights, price, date, seatsAvailable} = req.body;
 
     var tourId = from.slice(0,3).toUpperCase() + noOfDays + Number(Math.floor(Math.random() * 89) + 11);
     if(tourId.length>6) 
@@ -325,6 +325,8 @@ app.post("/addAgency", (req, res) => {
 app.post("/search", (req, res) => {
     source = req.body.source;
     destination = req.body.destination;
+    agency = req.body.agency;
+
     res.redirect("/bookTickets");
 })
 
