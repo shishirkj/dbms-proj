@@ -83,8 +83,8 @@
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Ticket Id</th>
-                <th scope="col">Tour ID</th>
                 <th scope="col">Destination</th>
+                <th scope="col">Journey Starts On</th>
                 <th scope="col">Days</th>
                 <th scope="col">Nights</th>
                 <th scope="col">Date of Booking</th>
@@ -98,8 +98,8 @@
               <% for(let i=0;i<tour_result.length; i++){ %>
               <tr>
                 <th><%= tour_result[i].ticket_id %></th>
-                <th><%= tour_result[i].tour_id %></th>
                 <th><%= tour_result[i].source %></th>
+                <th><%= tour_result[i].start_date %></th>
                 <th><%= tour_result[i].no_of_days %></th>
                 <th><%= tour_result[i].no_of_nights %></th>
                 <th><%= tour_result[i].date_of_booking %></th>

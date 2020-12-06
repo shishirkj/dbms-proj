@@ -65,8 +65,12 @@ app.post("/login", (req, res) => {
                 userData = result[0].user_id;
                 var username = result[0].name;
 
-                // select * from tours order by price desc limit 3;
-                var sql = sqlhelper.selectCommand("tours order by price desc limit 3", null, null);
+                // select * from tours where start_date>'2020-12-31' order by price desc limit 3;
+                var today = new Date();
+                today = today.getFullYear() + "-" 
+                        + String(today.getMonth()+1).padStart(2,'0') + "-" + String(today.getDate()).padStart(2,'0');
+                var sql = sqlhelper.selectCommand("tours", null, 
+                                "start_date>'" + today + "' order by price desc limit 3");
                 pool.executeQuery(sql, function(err, tours) {
                    console.log(tours);
                     res.render("homePage", {userData, username, tours});
@@ -206,8 +210,11 @@ app.get("/bookTickets", (req, res) => {
 
 
 app.get("/bookTours", (req, res) => {
-    // select * from tours
-    var sql = sqlhelper.selectCommand("tours", null, null);
+    //  select * from tours where start_date>'2020-12-31'
+    var today = new Date();
+    today = today.getFullYear() + "-" 
+                + String(today.getMonth()+1).padStart(2,'0') + "-" + String(today.getDate()).padStart(2,'0');
+    var sql = sqlhelper.selectCommand("tours", null, "start_date>'" + today + "'");
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         if(result.length>0) {
@@ -238,13 +245,13 @@ app.get("/viewTickets/:userData", (req, res) => {
         // select b.*, t.source, t.no_of_days, t.no_of_nights from tickets b, tours t 
                 // where user_id=id and t.tour_id=b.tour_id
         var sql = sqlhelper.selectCommand("tickets b, tours t", 
-                                    ["b.*", "t.source", "t.no_of_days", "t.no_of_nights"], 
+                                    ["b.*", "t.source", "t.no_of_days", "t.no_of_nights", "t.start_date"], 
                                     "user_id=" + userData + " and t.tour_id=b.tour_id order by date_of_booking");
         console.log(sql);
         pool.executeQuery(sql, function(err, tour_result) {
             if(tour_result.length<=0) console.log("No tour tickets booked");
-            bus_result = sqlhelper.getDateHelper(bus_result);
-            tour_result = sqlhelper.getDateHelper(tour_result);
+            bus_result = sqlhelper.getDateHelper(bus_result, ["date_of_booking"]);
+            tour_result = sqlhelper.getDateHelper(tour_result, ["date_of_booking", "start_date"]);
             res.render("viewBookedTicketes", {userData, bus_result, tour_result});
         });
         
@@ -279,11 +286,13 @@ app.get("/addTours", (req, res) => {
     // select t.*, group_concat(l.locations separator ' ') as places 
             // from tours t,tour_locations l where t.tour_id=l.tour_id group by l.tour_id
     var sql = sqlhelper.selectCommand("tours t,tour_locations l", 
-                                ["t.*", "group_concat(l.locations separator '\n') as places"], 
+                                ["t.*", "t.start_date as extra", "group_concat(l.locations separator '\n') as places"], 
                                 "t.tour_id=l.tour_id group by l.tour_id");
     console.log(sql);
     pool.executeQuery(sql, function(err, data) {
-       // console.log(data);
+       console.log(data);
+       data = sqlhelper.getShortenedDate(data, ["extra"]);
+       data = sqlhelper.getDateHelper(data, ["start_date"]);
         res.render("addToursForm", {data});
     });
    
@@ -315,7 +324,7 @@ app.post("/addBus", (req, res) => {
     var busNo = agencyId.slice(0,3).toUpperCase() + Number(Math.floor(Math.random() * 899) + 101);
     // insert into bus values ('busNo', 'source', 'departureTime', 'destination', 'arraivalTime', 12, 'agencyId', 34)
     var sql = sqlhelper.insertCommand("bus", [busNo, source, departureTime, destination, 
-                                            arraivalTime, parseInt(price), agencyId.substring(0,5), parseInt(seats_available)]);
+                                arraivalTime, parseInt(price), agencyId.substring(0,5), parseInt(seats_available)]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         res.redirect("/addBus");
@@ -330,7 +339,7 @@ app.post("/addBus", (req, res) => {
 // Add new tour to the tour table
 
 app.post("/addTours", (req, res) => {
-    const {from, placeIncluded, description, image, noOfDays, noOfNights, price, date, seatsAvailable} = req.body;
+    const {from, placeIncluded, description, image, noOfDays, noOfNights, price, seatsAvailable, startsOn} = req.body;
 
     var tourId = from.slice(0,3).toUpperCase() + noOfDays + Number(Math.floor(Math.random() * 89) + 11);
     if(tourId.length>6) 
@@ -338,7 +347,7 @@ app.post("/addTours", (req, res) => {
 
     // insert into tours values ('tourId', 'from', 'description', 'image', 2, 3, 4, 20)
     var sql = sqlhelper.insertCommand("tours", [tourId, from, description, image,
-                                parseInt(noOfDays), parseInt(noOfNights), parseInt(price), parseInt(seatsAvailable)]);
+                    parseInt(noOfDays), parseInt(noOfNights), parseInt(price), parseInt(seatsAvailable), startsOn]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         var a = [];
@@ -523,13 +532,14 @@ app.post("/updateBus", (req, res) => {
 // Update Tours
 
 app.post("/updateTours", (req, res) => {
-    const {tourId, from, placeIncluded, description, image, noOfDays, noOfNights, price, seatsAvailable} = req.body;
+    const {tourId, from, placeIncluded, description, image, noOfDays, noOfNights, 
+                    price, seatsAvailable, startsOn} = req.body;
     // update tours set source='source', description='description', images='images', 
             // no_of_days='no_of_days', no_of_nights='no_of_nights', price='price', 
             // seats_available='seats_available' where tour_id='tourId'
     var sql = sqlhelper.updateCommand("tours", 
-                        ["source", "description", "images", "no_of_days", "no_of_nights", "price", "seats_available"], 
-                        [from, description, image, noOfDays, noOfNights, price, seatsAvailable], ["tour_id"], [tourId]);
+        ["source", "description", "images", "no_of_days", "no_of_nights", "price", "seats_available", "start_date"], 
+        [from, description, image, noOfDays, noOfNights, price, seatsAvailable, startsOn], ["tour_id"], [tourId]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         // delete from tour_locations where tour_id='tourId'

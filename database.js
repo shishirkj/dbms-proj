@@ -3,6 +3,10 @@ function invertedCommas(a) {
     return a;
 }
 
+function nextMonth(a) {
+    return (parseInt(a)+1).toString();
+}
+
 module.exports = {
     insertCommand : function(Table, Values) {
         var commaSeparator = ", ";
@@ -58,11 +62,27 @@ module.exports = {
     },
 
 
-    getDateHelper : function(result) {
+    getDateHelper : function(result, date_type) {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
         result.forEach(element => {
-            element.date_of_booking = months[element.date_of_booking.getMonth()] + " " + element.date_of_booking.getDate() 
-                                                + ", " + element.date_of_booking.getFullYear();
+            date_type.forEach(i => {
+                if(element[i]==null) return;
+                element[i] = months[element[i].getMonth()] + " " + element[i].getDate() 
+                                        + ", " + element[i].getFullYear();
+            });
+        });
+        return result;
+    },
+
+
+    getShortenedDate : function(result, date_type) {
+        // 2020-12-09T18:30:00.000Z
+        result.forEach(element => {
+            date_type.forEach(i => {
+                if(element[i]==null) return;
+                element[i] = element[i].getFullYear() + "-" 
+                                + nextMonth(element[i].getMonth()) + "-" + element[i].getDate();
+            });
         });
         return result;
     }
