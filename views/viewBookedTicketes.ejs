@@ -48,8 +48,8 @@
             <thead class="thead-dark">
               <tr>
                 <th scope="col">Ticket Id</th>
-                <th scope="col">Agency Name</th>
                 <th scope="col">Bus No</th>
+                <th scope="col">Agency Name</th>
                 <th scope="col">Source</th>
                 <th scope="col">Destination</th>
                 <th scope="col">Date of Booking</th>
@@ -63,8 +63,8 @@
               <% for(let i=0;i<bus_result.length; i++){ %>
               <tr>
                 <th><%= bus_result[i].ticket_id %></th>
-                <th></th>
                 <th><%= bus_result[i].bus_number %></th>
+                <th><%= bus_result[i].agency_name %></th>
                 <th><%= bus_result[i].source %></th>
                 <th><%= bus_result[i].destination %></th>
                 <th><%= bus_result[i].date_of_booking %></th>

@@ -43,7 +43,7 @@
           <thead class="thead-dark">
             <tr>
               <th scope="col">Bus No</th>
-              <th scope="col">Agency Id</th>
+              <th scope="col">Agency Name</th>
               <th scope="col">Source</th>
               <th scope="col">Departure Time</th>
               <th scope="col">Destination</th>
@@ -59,7 +59,8 @@
             <% for(let i=0;i<data.length;i++){ %>
               <tr>
                 <th class="busId"><%= data[i].bus_number %></th>
-                <th class="agencyId"><%= data[i].agency_id %></th>
+                <th class="agencyId" style="display: none"><%= data[i].agency_id %></th>
+                <th class="agencyName"><%= data[i].agency_name %></th>
                 <th class="source"><%= data[i].source %></th>
                 <th class="departureTime"><%= data[i].departure_time %></th>
                 <th class="destination"><%= data[i].destination %></th>
@@ -214,7 +215,9 @@
                         <select id="inputState" class="form-control" name="agencyId" >
                           <option selected>Choose...</option>
                          <% for(let i=0;i<agency.length;i++) { %>
-                           <span><%=agency[i].agency_name %></span> <option><%= agency[i].agency_id %><span class="">(<%= agency[i].agency_name %>)</span></option>
+                           <span><%=agency[i].agency_name %></span> 
+                            <option><%= agency[i].agency_id %>
+                              <span class=""> ( <%= agency[i].agency_name %> ) </span></option>
                          <% } %>
                         </select>
                       </div>

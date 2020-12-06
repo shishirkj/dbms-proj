@@ -12,7 +12,6 @@ const sqlhelper = require("./database.js");
 const app = express();
 
 // Tours and packages
-var data, tours;
 var userData;
 // var source, destination;
 var source, destination, agency;
@@ -120,32 +119,86 @@ app.post("/register",(req, res) => {
 
 app.get("/bookTickets", (req, res) => {
     var sql;
-    // select * from bus
-    if(!source && !destination) sql = sqlhelper.selectCommand("bus", null, null);
 
-    // select * from bus where destination like '%destination%'
-    else if(!source) sql = sqlhelper.selectCommand("bus", null, "destination like '%" + destination + "%'");
+    if(agency==="-- None --") agency = null;
 
-    // select * from bus where source like '%source%'
-    else if(!destination) sql = sqlhelper.selectCommand("bus", null, "source like '%" + source + "%'");
+    if(!source && !destination) {
 
-    // select * from bus where source like '%source%' and destination like '%destination%'
-    else sql = sqlhelper.selectCommand("bus", null, "source like '%" + source + "%'" 
-                                                + " and destination like '%" + destination + "%'");
+        // select b.*,a.agency_name from bus b, travel_agency a where b.agency_id=a.agency_id;
+        if(!agency) sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], "b.agency_id=a.agency_id");
+
+        // select b.*,a.agency_name from bus b, travel_agency a where b.agency_id=a.agency_id and a.agency_name='agency';
+        else sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and a.agency_name='" + agency + "'");
+    }
+
+
+    else if (!source) {
+
+        // select b.*,a.agency_name from bus b, travel_agency a 
+            // where b.agency_id=a.agency_id and destination like %'destination'%;
+        if(!agency) sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and destination like '%" + destination + "%'");
+
+        // select b.*,a.agency_name from bus b, travel_agency a 
+            // where b.agency_id=a.agency_id and destination like %'destination'% and a.agency_name='agency';
+        else sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and destination like '%" + destination + "%' and a.agency_name='" + agency + "'");
+
+    }
+
+
+    else if (!destination) {
+
+        // select b.*,a.agency_name from bus b, travel_agency a 
+            // where b.agency_id=a.agency_id and source like %'source'%;
+        if(!agency) sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and source like '%" + source + "%'");
+
+        // select b.*,a.agency_name from bus b, travel_agency a 
+            // where b.agency_id=a.agency_id and source like %'source'% and a.agency_name='agency';
+        else sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and source like '%" + source + "%' and a.agency_name='" + agency + "'");
+
+    }
+
+
+    else {
+
+        // select b.*,a.agency_name from bus b, travel_agency a 
+            // where b.agency_id=a.agency_id and source like %'source'% and destination like %'destination'%;
+        if(!agency) sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and source like '%" + source + "%' and destination like '%" + destination + "%'");
+
+        // select b.*,a.agency_name from bus b, travel_agency a 
+            // where b.agency_id=a.agency_id and source like %'source'% 
+            // and destination like %'destination'% and a.agency_name='agency';
+        else sql = sqlhelper.selectCommand(
+            "bus b, travel_agency a", ["b.*", "a.agency_name"], 
+                "b.agency_id=a.agency_id and source like '%" + source + "%' and destination like '%" + 
+                    destination + "%' and a.agency_name='" + agency + "'");
+
+    }
+
+
     console.log(sql);
-    pool.executeQuery(sql, function(err, result) {
-        if(result.length>=0) {
-            data = result;
-            source = null;
-            destination=null;
-            res.render("exploreTickets",{userData,data,source,destination});
-        } else {
-            console.log("No bus available from " + source + " to " + destination);
-            source = null;
-            destination = null;
-            //res.send({"code": 12, "message": "No bus available from " + source + " to " + destination});
-            res.redirect("/bookTickets");
-        }
+    pool.executeQuery(sql, function(err, data) {
+        source = null;
+        destination=null;
+        agency = null;
+        // select agency_name from travel_agency;
+        var sql = sqlhelper.selectCommand("travel_agency", ["agency_name"], null);
+        console.log(sql);
+        pool.executeQuery(sql, function(e, agencies) {
+            res.render("exploreTickets",{agencies,userData,data,source,destination});
+        })
     });
 })
 
@@ -172,9 +225,12 @@ app.get("/bookTours", (req, res) => {
 // View all the tickets (bus as well as tour) booked by the user
 
 app.get("/viewTickets/:userData", (req, res) => {
-    // select t.*, b.source, b.destination from tickets t, bus b where user_id=id and t.bus_number=b.bus_number
-    var sql = sqlhelper.selectCommand("tickets t, bus b", ["t.*", "b.source", "b.destination"], 
-                                            "user_id=" + userData + " and t.bus_number=b.bus_number");
+    // select t.*, b.source, b.destination, a.agency_name from tickets t, bus b, travel_agency a 
+        // where user_id=id and t.bus_number=b.bus_number and b.agency_id=a.agency_id
+    var sql = sqlhelper.selectCommand("tickets t, bus b, travel_agency a", 
+                    ["t.*", "b.source", "b.destination", "a.agency_name"], 
+                        "user_id=" + userData + " and t.bus_number=b.bus_number and b.agency_id=a.agency_id" +
+                        " order by date_of_booking");
     console.log(sql);
     pool.executeQuery(sql, function(err, bus_result) {
         if(bus_result.length<=0) console.log("No bus tickets booked");
@@ -183,7 +239,7 @@ app.get("/viewTickets/:userData", (req, res) => {
                 // where user_id=id and t.tour_id=b.tour_id
         var sql = sqlhelper.selectCommand("tickets b, tours t", 
                                     ["b.*", "t.source", "t.no_of_days", "t.no_of_nights"], 
-                                    "user_id=" + userData + " and t.tour_id=b.tour_id");
+                                    "user_id=" + userData + " and t.tour_id=b.tour_id order by date_of_booking");
         console.log(sql);
         pool.executeQuery(sql, function(err, tour_result) {
             if(tour_result.length<=0) console.log("No tour tickets booked");
@@ -201,8 +257,8 @@ app.get("/viewTickets/:userData", (req, res) => {
 // Opens add bus form
 
 app.get("/addBus", (req, res) => {
-    // select * from bus
-    var sql = sqlhelper.selectCommand("bus", null, null);
+    // select b.*,a.agency_name from bus b, travel_agency a where b.agency_id=a.agency_id;
+    var sql = sqlhelper.selectCommand("bus b, travel_agency a", ["b.*", "a.agency_name"], "b.agency_id=a.agency_id");
     console.log(sql);
     pool.executeQuery(sql, function(err, data) {
         // select agency_id, agency_name from travel_agency

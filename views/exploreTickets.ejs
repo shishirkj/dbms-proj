@@ -106,12 +106,10 @@
                   <!-- <input autocomplete="false" type="text" name="agency" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"> -->
                   <label for="exampleFormControlSelect1"></label>
                   <select class="form-control" id="agency" name="agency">
-                    <option>Choose</option>
-                    <option>Global</option>
-                    <option>Srs</option>
-                    <option>Vrl</option>
-                    <option>Cauvery</option>
-                    <option>Orange</option>
+                    <option>-- None --</option>
+                    <% for(let i=0;i<agencies.length;i++){ %>
+                      <option><%= agencies[i].agency_name %></option>
+                    <% } %>
                   </select>
                 </div>
               </div>
@@ -129,19 +127,18 @@
       <div class="container">
 
         <% if(data.length == 0) { %>
-          <h2 style="text-align: center;">No Buses Found For The Search</h2>
+          <h2 style="text-align: center;">Sorry... No Bus Found</h2>
         <% }else { %>
         <table class="table table-bordered">
           <thead class="table-dark ">
             <tr>
-              <th scope="col">Agency</th>
               <th scope="col">Bus Number</th>
+              <th scope="col">Agency</th>
               <th scope="col">Source</th>
               <th scope="col">Departure Time</th>
               <th scope="col">Destination</th>
               <th scope="col">Arrival Time</th>
               <th scope="col">Fare</th>
-              <th scope="col">Agency ID</th>
               <th scope="col">Seats Available</th>
               <th scope="col">Book Ticket</th>
             </tr>
@@ -151,14 +148,13 @@
           <tbody>
             <% for(let i=0;i<data.length;i++){ %>
               <tr class="table-secondary">
-                <th></th>
                 <th><%= data[i].bus_number %></th>
+                <th><%= data[i].agency_name %></th>
                 <th><%= data[i].source %></th>
                 <th><%= data[i].departure_time %></th>
                 <th><%= data[i].destination %></th>
                 <th><%= data[i].arrival_time %></th>
                 <th><%= data[i].fare %></th>
-                <th><%= data[i].agency_id %></th>
                 <th><%= data[i].seats_available %></th>
                 <form action="/bus_booking/<%= data[i].bus_number %>" method="POST">
                   <th>
