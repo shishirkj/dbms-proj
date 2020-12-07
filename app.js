@@ -217,13 +217,9 @@ app.get("/bookTours", (req, res) => {
     var sql = sqlhelper.selectCommand("tours", null, "start_date>'" + today + "'");
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
-        if(result.length>0) {
             tours = result;
+            tours = sqlhelper.getDateHelper(tours,["start_date"]);
             res.render("toursPackagePage",{userData,tours});
-        } else {
-            console.log("No tours available in the database");
-            res.send({"code": 13, "message": "No tours available in the database"});
-        }
     });
 })
 

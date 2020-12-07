@@ -104,6 +104,9 @@
         <div class="container">
             <div class="row">
 
+              <% if(tours.length == 0) { %>
+                <h2 style="text-align: center;">Sorry... No Packages Found</h2>
+              <% }else { %>
               <% for(let i=0; i<tours.length; i++){ %>
                 <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
@@ -112,13 +115,13 @@
                                         src="/images/Tour_Images/<%= tours[i].images %>" alt="<%= tours[i].images %>">
                     <div class="card-body text-center">
                         <h1 class="card-title pricing-card-title"> <small class="text-muted">&#8377</small> 
-                                      <%= tours[i].price %> <small class="text-muted">/ day</small></h1>
+                                      <%= tours[i].price %> <small class="text-muted"></small></h1>
                         <ul class="list-unstyled mt-3 mb-4">
                         <li>Destination : <%= tours[i].source %></li>
                         <li> Days : <%= tours[i].no_of_days %></li>
                         <li> Nights : <%= tours[i].no_of_nights %></li>
                         <li>Seats Available : <%= tours[i].seats_available %></li>
-                        <li>Starting Date : <%= tours[i].start_date %></li>
+                        <li class="date">Starting Date : <%= tours[i].start_date %></li>
                         <span class="" id="description"> <%= tours[i].description %></span>
                         </ul>
                             <!-- <button type="button" class="gfgselect btn  float-left btn-secondary" data-toggle="modal" data-target="#exampleModal" style="width: 40%;">View</button> -->
@@ -129,7 +132,7 @@
                 </div>
                 </div>
                 <% } %>
-            
+            <% } %>
                
           </div>
         </div>

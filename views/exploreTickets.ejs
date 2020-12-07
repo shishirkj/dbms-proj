@@ -76,15 +76,15 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default" value="<%= source %>">Source</span>
                   </div>
-                  <input autocomplete="false" type="text" name="source" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                  <input autocomplete="false" type="text" id="source" name="source" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 </div>
 
               </div>
 
               <div class=" col-md-3" id="icons">
                 <div class="icon-group">
-                  <i class="fa fa-arrow-circle-left" style="font-size:30px;"></i>
-                  <i class="fa fa-arrow-circle-right" style="font-size:30px;"></i>
+                  <i onclick="change()" class="fa fa-arrow-circle-left" style="font-size:30px;"></i>
+                  <i  onclick="change()" class="fa fa-arrow-circle-right" style="font-size:30px;"></i>
 
                 </div>
               </div>
@@ -94,7 +94,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="inputGroup-sizing-default" value="<%= destination %>">Destination</span>
                   </div>
-                  <input autocomplete="false" type="text" name="destination" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                  <input autocomplete="false" type="text" id="destination" name="destination" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                 </div>
               </div>
 
@@ -248,6 +248,17 @@
         </div>
     </section>
 
+    <script>
+      function change() {
+       // console.log("inside change");
+
+        source = document.getElementById("source").value;
+        destination = document.getElementById("destination").value;
+
+        document.getElementById("source").value = destination;
+        document.getElementById("destination").value = source;
+      }
+    </script>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
