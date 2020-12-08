@@ -50,7 +50,38 @@ app.post("/login", (req, res) => {
 
     if(sqlhelper.isAdmin(email,password)) {
         console.log("Welcome admin");
-        res.render("adminHomePage");
+        // select date_of_booking as x, count(*) as y from tickets where bus_number!='null' group by date_of_booking;
+        var sql = sqlhelper.selectCommand("tickets", ["date_of_booking as x", "count(*) as y"], 
+                                        "bus_number!='null' group by date_of_booking");
+        console.log(sql);
+
+        pool.executeQuery(sql, function(err, bus) {
+            // select date_of_booking as x, count(*) as y from tickets where tour_id!='null' group by date_of_booking;
+            var sql = sqlhelper.selectCommand("tickets", ["date_of_booking as x", "count(*) as y"], 
+                                                "tour_id!='null' group by date_of_booking");
+            console.log(sql);
+
+            pool.executeQuery(sql, function(e, tour) {
+                // select t.agency_name as x, (case when isnull(b.y) then 0 else b.y end) as y 
+                    // from travel_agency t left join 
+                    // (select agency_id, count(*) as y from bus group by agency_id) as b 
+                    // on t.agency_id=b.agency_id;
+                var sql = "select t.agency_name as x, (case when isnull(b.y) then 0 else b.y end) as y " +
+                            "from travel_agency t left join " + 
+                            "(select agency_id, count(*) as y from bus group by agency_id) as b " + 
+                            "on t.agency_id=b.agency_id";
+                console.log(sql);
+
+                pool.executeQuery(sql, function(e, travel_agency) {
+                    bus = sqlhelper.getDateHelper(bus, ["x"]);
+                    tour = sqlhelper.getDateHelper(tour, ["x"]);
+                    console.log(bus);
+                    console.log(tour);
+                    console.log(travel_agency)
+                    res.render("adminHomePage", {bus, tour, travel_agency});
+                });
+            });
+        });
         return;
     }
 
