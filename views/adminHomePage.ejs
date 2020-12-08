@@ -15,54 +15,75 @@
 
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-        <script type="text/javascript">
-
-        var buses = [];
-        for(let i=0; i<bus.length; i++) buses.push({ x:bus[i].x, y:bus[i].y });
-
-        var tours = [];
-        for(let i=0; i<tour.length; i++) tours.push({ x:tour[i].x, y:tour[i].y });
-
+    <script type="text/javascript">
         window.onload = function () {
 
-            var ticketsChart = new CanvasJS.Chart("ticketsChart",
+            var buses = [];
+            <% for(let i=0;i<bus.length;i++){ %>
+                buses.push({label:"<%= bus[i].x%>" , y: <%= bus[i].y %> })
+            <% } %>
+
+            var tours = [];
+            <% for(let i=0;i<tour.length;i++){ %>
+                tours.push({label:"<%= tour[i].x%>" , y: <%= tour[i].y %> })
+            <% } %>
+
+            console.log(buses);
+            console.log(tours);
+
+            var chart = new CanvasJS.Chart("chart",
             {
-                animationEnabled: true,
-                title:{
-                text: "Tickets booked"
+            title:{
+            text: "Tickets Booked On Each Day"
             },
-            data: 
-            [
-                {
-                    type: "spline",
-                    dataPoints: buses
-                },
-                {
-                    type: "spline",
-                    dataPoints: tours
-                }
-            ]});
-            ticketsChart.render();
-
-
+            axisX:{
+            title : "Date"
+            },
+            axisY:{
+            title : "No Of Tickets"
+            },
+            data: [
+            {
+                type: "spline",
+                legendText: "Bus tickets",
+                showInLegend: true, 
+                dataPoints: buses
+            },
+            {
+                type: "spline",
+                legendText: "Tours tickets",
+                showInLegend: true, 
+                dataPoints: tours
+            }
+            ]
+            });
+            chart.render();
+            
             var agencies = [];
-            for(let i=0; i<travel_agency.length; i++) agencies.push({ x:travel_agency[i].x, y:travel_agency[i].y });
+            <% for(let i=0; i<travel_agency.length; i++){ %>
+                 agencies.push({ label:"<%=travel_agency[i].x %>", y:<%= travel_agency[i].y %> });
+            <% } %>
 
-            var chart = new CanvasJS.Chart("travelagency", {
+            console.log(agencies);
+
+            var chart = new CanvasJS.Chart("chart1", {
                 title:{
-                    text: "Travel Agencies"              
+                    text: "Buses Available in Each Agency"              
                 },
-                data: 
-                [              
-                    {
-                        // Change type to "doughnut", "line", "splineArea", etc.
-                        type: "column",
-                        dataPoints: agencies
-                    }
+                axisX:{
+                title : "Agencies"
+                },
+                axisY:{
+                title : "No Of Buses"
+                },
+                data: [              
+                {
+                    type: "column",
+                    dataPoints : agencies
+                }
                 ]
             });
             chart.render();
-
         }
         </script>
 </head>
@@ -93,14 +114,43 @@
           </nav>
 
 
+          <section class="header" style="background-image:url('images/slide.jpg') ;  padding-top: 70px;">
+            <div class="container">
+                <img src="images/logo.png">
+                <button type="button" class="login-btn">Hello Admin</button>
+            </div>
+            <h1>Travel Across the Globe</h1>
+            <p>Be adventurous! Follow the Passion</p>
+        </section>
+
+
         <section class="features">
             <div class="row">
                 <!-- <div class="" id="chart" style="height: 500px; width: 50%; margin-left: 400px;"> -->
-                <div class="" id="travelagency" style="height: 500px; width: 50%; margin-left: 400px; margin-bottom: 50px;"></div>
+                <!-- <div class="" id="travelagency" style="height: 500px; width: 50%; margin-left: 400px; margin-bottom: 50px;"></div> -->
+                <div class="" id="chart" style="height: 500px; width: 50%; margin-left: 400px; margin-bottom: 50px;"></div>
             </div>
             <div class="row">
-                <div class="" id="ticketsChart" style="height: 500px; width: 50%; margin-left: 400px;">
+                <!-- <div class="" id="ticketsChart" style="height: 500px; width: 50%; margin-left: 400px;"> -->
+                <div class="" id="chart1" style="height: 500px; width: 50%; margin-left: 400px;">
                 <!-- <div class="" id="chart1" style="height: 500px; width: 50%; margin-left: 400px;"></div> -->
+            </div>
+        </section>
+
+
+        <section class="banner" style="background-image: url('images/slide.jpg');">
+            <div class="banner-highlights">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h2>Get 30% on top destinations</h2>
+                            <p>Book your tickets before 31st march and avail 30% flat discount</p>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="booking-btn">Book Now</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
