@@ -80,8 +80,9 @@ module.exports = {
         result.forEach(element => {
             date_type.forEach(i => {
                 if(element[i]==null) return;
-                element[i] = element[i].getFullYear() + "-" 
-                                + nextMonth(element[i].getMonth()) + "-" + element[i].getDate();
+                element[i] = (element[i].getFullYear()).toString().padStart(4,0) + "-" 
+                                + (nextMonth(element[i].getMonth())).toString().padStart(2,0) + "-" 
+                                + (element[i].getDate()).toString().padStart(2,0);
             });
         });
         return result;
