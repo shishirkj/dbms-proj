@@ -69,13 +69,33 @@
                                     <div class="price">
                                         <p>&#8377 <%= tours[i].price %></p>
                                     </div>
-                                    <div class="rating">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-half-o"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
+                                    <% if(i==0){ %>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-half-o"></i>
+                                        </div>
+                                    <% } %>
+                                    <% if(i==1){ %>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                    <% } %>
+                                    <% if(i==2){ %>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-half-o"></i>
+                                            <i class="fa fa-star-o"></i>
+                                        </div>
+                                    <% } %>
                                 </div>
                                 <div class="feature-details">
                                     <h4><%= tours[i].source %></h4>
@@ -167,7 +187,7 @@
 
                     <div class="col-md-4">
                         <div class="user-review">
-                            <p>Nice site.The agency under this website are so cool.</p>
+                            <p>Nice site. The employees here are so cool.</p>
                             <h5>Kiran Kumar</h5>
                             <small>Tiptur</small>
                         </div>
@@ -176,7 +196,7 @@
 
                     <div class="col-md-4">
                         <div class="user-review" style="height: 225px;">
-                            <p>I really loved this website.Good work guy's</p>
+                            <p>I really loved this website. Good work guys. Keep it up!</p>
                             <h5>Anonymous</h5>
                             <small>Bengaluru</small>
                         </div>
@@ -194,8 +214,7 @@
 
                     <div class="col-md-3">
                         <img src="images/logo.png" class="footer-logo">
-                        <p class="no-point">This is the Travel Agency page which 
-                                            I have created rather copied from the internet.</p>
+                        <p class="no-point">Travel Services Database Management System done for the DBMS Mini Project</p>
                     </div>
 
                     <div class="col-md-3">

@@ -65,7 +65,7 @@
       <!-- jumbotron -->
       <div class="jumbotron jumbotron-fluid">
         <div class="container">
-         <h1 class="display-4">Book Bus Tickets</h1>
+         <h1 class="display-4">Book your Bus Tickets</h1>
 
          <form action="/search" method="POST">
             <div class="row">
@@ -137,7 +137,7 @@
               <th scope="col">Source</th>
               <th scope="col">Departure Time</th>
               <th scope="col">Destination</th>
-              <th scope="col">Arrival Time</th>
+              <th scope="col">Duration</th>
               <th scope="col">Fare</th>
               <th scope="col">Seats Available</th>
               <th scope="col">Book Ticket</th>
@@ -153,7 +153,7 @@
                 <th><%= data[i].source %></th>
                 <th><%= data[i].departure_time %></th>
                 <th><%= data[i].destination %></th>
-                <th><%= data[i].arrival_time %></th>
+                <th><%= data[i].duration %></th>
                 <th><%= data[i].fare %></th>
                 <th><%= data[i].seats_available %></th>
                 <form action="/bus_booking/<%= data[i].bus_number %>" method="POST">

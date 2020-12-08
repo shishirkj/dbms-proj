@@ -44,7 +44,7 @@
             <tr>
               <th scope="col">Tour Id</th>
               <th scope="col">Destination</th>
-              <th scope="col">Journey Starts On</th>
+              <th scope="col">Date of Journey</th>
               <th scope="col">Places Included</th>
               <th scope="col">Description</th>
               <th scope="col">Image</th>
@@ -52,7 +52,7 @@
               <th scope="col">No Of Nights</th>
               <th scope="col">Price</th>
               <th scope="col">Seats Available</th>
-              <th scope="col">Preview</th>
+              <th scope="col"></th>
             </tr>
           </thead>
 
@@ -71,7 +71,7 @@
                 <th class="noOfNights"><%= data[i].no_of_nights %></th>
                 <th class="price"><%= data[i].price %></th>
                 <th class="seatsAvailable"><%= data[i].seats_available %></th>
-                <th><button class="gfgselect btn-secondary" data-toggle="modal" data-target="#staticBackdrop">VIEW</button></th>
+                <th><button class="gfgselect btn-secondary" data-toggle="modal" data-target="#staticBackdrop">EDIT</button></th>
               </tr>
             <% } %>
           </tbody>

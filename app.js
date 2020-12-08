@@ -50,26 +50,26 @@ app.post("/login", (req, res) => {
 
     if(sqlhelper.isAdmin(email,password)) {
         console.log("Welcome admin");
-        // select date_of_booking as x, count(*) as y from tickets where bus_number!='null' group by date_of_booking;
-        var sql = sqlhelper.selectCommand("tickets", ["date_of_booking as x", "count(*) as y"], 
-                                        "bus_number!='null' group by date_of_booking");
+        var sql = "select distinct t.date_of_booking as x, "
+                    + "(case when isnull(c.count) then 0 else c.count end) as y from tickets t "
+                    + "left join (select t1.date_of_booking as x1, count(*) as count from tickets t1 "
+                    + "where bus_number!='null' group by t1.date_of_booking) as c "
+                    + "on t.date_of_booking=c.x1 order by t.date_of_booking";
         console.log(sql);
 
         pool.executeQuery(sql, function(err, bus) {
-            // select date_of_booking as x, count(*) as y from tickets where tour_id!='null' group by date_of_booking;
-            var sql = sqlhelper.selectCommand("tickets", ["date_of_booking as x", "count(*) as y"], 
-                                                "tour_id!='null' group by date_of_booking");
+            var sql = "select distinct t.date_of_booking as x, "
+                        + "(case when isnull(c.count) then 0 else c.count end) as y from tickets t "
+                        + "left join (select t1.date_of_booking as x1, count(*) as count from tickets t1 "
+                        + "where tour_id!='null' group by t1.date_of_booking) as c "
+                        + "on t.date_of_booking=c.x1 order by t.date_of_booking";
             console.log(sql);
 
             pool.executeQuery(sql, function(e, tour) {
-                // select t.agency_name as x, (case when isnull(b.y) then 0 else b.y end) as y 
-                    // from travel_agency t left join 
-                    // (select agency_id, count(*) as y from bus group by agency_id) as b 
-                    // on t.agency_id=b.agency_id;
-                var sql = "select t.agency_name as x, (case when isnull(b.y) then 0 else b.y end) as y " +
-                            "from travel_agency t left join " + 
-                            "(select agency_id, count(*) as y from bus group by agency_id) as b " + 
-                            "on t.agency_id=b.agency_id";
+                var sql = "select t.agency_name as x, (case when isnull(b.y) then 0 else b.y end) as y "
+                            + "from travel_agency t left join "
+                            + "(select agency_id, count(*) as y from bus group by agency_id) as b "
+                            + "on t.agency_id=b.agency_id";
                 console.log(sql);
 
                 pool.executeQuery(sql, function(e, travel_agency) {
@@ -94,7 +94,7 @@ app.post("/login", (req, res) => {
             if(password===result[0].password) {
                 console.log("Login Successful");
                 userData = result[0].user_id;
-                var username = result[0].name;
+                var username = result[0].fname;
 
                 // select * from tours where start_date>'2020-12-31' order by price desc limit 3;
                 var today = new Date();
@@ -140,7 +140,7 @@ app.post("/register",(req, res) => {
             res.redirect("/");
         } else {
             // insert into user values (null, 'Athish Venkatesh', 'athish@gmail.com', '123', '9999999999')
-            var sql = sqlhelper.insertCommand("user", [null, firstName + " " + lastName, email, password, phoneNumber]);
+            var sql = sqlhelper.insertCommand("user", [null, firstName, lastName, email, password, phoneNumber]);
             console.log(sql);
             pool.executeQuery(sql, function(err, result) {});
             res.redirect("/");
@@ -349,9 +349,13 @@ app.post("/addBus", (req, res) => {
     console.log(agencyId);
     
     var busNo = agencyId.slice(0,3).toUpperCase() + Number(Math.floor(Math.random() * 899) + 101);
-    // insert into bus values ('busNo', 'source', 'departureTime', 'destination', 'arraivalTime', 12, 'agencyId', 34)
-    var sql = sqlhelper.insertCommand("bus", [busNo, source, departureTime, destination, 
-                                arraivalTime, parseInt(price), agencyId.substring(0,5), parseInt(seats_available)]);
+    // insert into bus  values ('HYD781', 'hbhjbh', '02:00', 'gcgjvg', '08:00', 89, 'HYD45', 8);
+    // insert into bus (bus_number, source, departure_time, destination, arrival_time, 
+                            // fare, agency_id, seats_available) values ('busNo', 'source', 'departureTime', 
+                            // 'destination', 'arraivalTime', 12, 'agencyId', 34)
+    var sql = sqlhelper.insertCommand("bus (bus_number, source, departure_time, " +
+                            "destination, arrival_time, fare, agency_id, seats_available)", [busNo, source, departureTime, destination, 
+                            arraivalTime, parseInt(price), agencyId.substring(0,5), parseInt(seats_available)]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         res.redirect("/addBus");
@@ -446,7 +450,11 @@ app.post("/bus_booking/:busNo", (req, res) => {
                                 [ticketId, userData, "NOW()", busNo, null, people, total_price]);
             console.log(sql);
             pool.executeQuery(sql, function(err, result) {
-                res.redirect("/viewTickets/userdata="+userData);
+                var sql = "update bus set seats_available = seats_available - " + parseInt(people);
+                console.log(sql);
+                pool.executeQuery(sql, function(e, r) {
+                    res.redirect("/viewTickets/userdata="+userData);
+                });
             });
         }
     });
@@ -475,7 +483,11 @@ app.post("/tour_booking/:tourId", (req, res) => {
                                 [ticketId, userData, "NOW()", null, tourId, people, total_price]);
             console.log(sql);
             pool.executeQuery(sql, function(err, result) {
-                res.redirect("/viewTickets/userdata="+userData);
+                var sql = "update tours set seats_available = seats_available - " + parseInt(people);
+                console.log(sql);
+                pool.executeQuery(sql, function(e, r) {
+                    res.redirect("/viewTickets/userdata="+userData);
+                });
             });
         }
     });
@@ -544,8 +556,8 @@ app.post("/updateBus", (req, res) => {
             // agency_id='agency_id', seats_available='seats_available' 
             // where bus_number='bunNo'
     var sql = sqlhelper.updateCommand("bus", 
-        ["source", "departure_time", "destination", "arrival_time", "fare", "agency_id", "seats_available"], 
-        [source, departureTime, destination, arraivalTime, parseInt(price), agencyId, parseInt(seats_available)], 
+        ["source", "departure_time", "destination", "arrival_time", "fare", "seats_available"], 
+        [source, departureTime, destination, arraivalTime, parseInt(price), parseInt(seats_available)], 
         ["bus_number"], [busNo]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
