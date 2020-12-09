@@ -18,11 +18,11 @@
     <input autocomplete="false" type="text" name="firstName" placeholder="First Name" required>
     <input autocomplete="false" type="text" name="lastName" placeholder="Last Name">
 	<input autocomplete="false" type="email" name="email" placeholder="Email" required>
-    <input autocomplete="false" type="password" name="password" placeholder="Password" required>
+	<input autocomplete="false" type="password" name="password" placeholder="Password" required>
+	<span>(password length should be 8-10)</span>
 	<input autocomplete="false" type="tel" name="phoneNumber" placeholder="Contact Number" required>
 	<br>
 	<span style="color: red;"><%= message %></span>
-	<br>
 	<button type="submit" >Sign up</button>
 </form>
 </div>
@@ -37,6 +37,7 @@
 	<span> Use your account to login</span>
 	<input autocomplete="false" type="email" name="email" placeholder="Email" required>
 	<input autocomplete="false" type="password" name="password" placeholder="Password" required>
+	<span>(password length should be 8-10)</span>
 	<br>
 	<span style="color: red;"><%= message %></span>
 	<br>

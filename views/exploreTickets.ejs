@@ -136,8 +136,9 @@
               <th scope="col">Agency</th>
               <th scope="col">Source</th>
               <th scope="col">Departure Time</th>
-              <th scope="col">Destination</th>
               <th scope="col">Duration</th>
+              <th scope="col">Arraival Time</th>
+              <th scope="col">Destination</th>
               <th scope="col">Fare</th>
               <th scope="col">Seats Available</th>
               <th scope="col">Book Ticket</th>
@@ -152,8 +153,9 @@
                 <th><%= data[i].agency_name %></th>
                 <th><%= data[i].source %></th>
                 <th><%= data[i].departure_time %></th>
+                <th>--<%= data[i].duration %>--</th>
+                <th><%= data[i].arrival_time %></th>
                 <th><%= data[i].destination %></th>
-                <th><%= data[i].duration %></th>
                 <th><%= data[i].fare %></th>
                 <th><%= data[i].seats_available %></th>
                 <form action="/bus_booking/<%= data[i].bus_number %>" method="POST">
