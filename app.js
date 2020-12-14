@@ -453,7 +453,7 @@ app.post("/bus_booking/:busNo", (req, res) => {
                 var sql = "update bus set seats_available = seats_available - " + parseInt(people);
                 console.log(sql);
                 pool.executeQuery(sql, function(e, r) {
-                    res.redirect("/viewTickets/userdata="+userData);
+                    res.redirect("/bookTickets");
                 });
             });
         }
@@ -486,7 +486,7 @@ app.post("/tour_booking/:tourId", (req, res) => {
                 var sql = "update tours set seats_available = seats_available - " + parseInt(people);
                 console.log(sql);
                 pool.executeQuery(sql, function(e, r) {
-                    res.redirect("/viewTickets/userdata="+userData);
+                    res.redirect("/bookTours");
                 });
             });
         }

@@ -127,7 +127,7 @@
               </div>
             </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-secondary" style="width: 20%;">Update</button>
+            <button type="submit" class="btn btn-secondary" onclick="update()" style="width: 20%;">Update</button>
           </div>
         </form>
         <div class="modal-footer">
@@ -217,7 +217,7 @@
               </div>
             </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-secondary">Submit</button>
+            <button type="submit" class="btn btn-secondary" onclick="submit()">Submit</button>
           </div>
         </form>
         </div>
@@ -246,6 +246,16 @@
               document.getElementById("delete").setAttribute("action","/agencydelete/"+agencyId+"");
       });
 });
+
+        
+function submit() {
+            alert("MESSAGE FROM TRAVEL SERVICE" + "\n" + "\n" + "New Travel Agency was added Sucessfully");
+          }
+
+          function update() {
+            alert("MESSAGE FROM TRAVEL SERVICE" + "\n" + "\n" + "Travel Agency data was updated ");
+          }
+
            
     </script>
 
