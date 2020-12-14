@@ -160,7 +160,7 @@
                 <th><%= data[i].seats_available %></th>
                 <form action="/bus_booking/<%= data[i].bus_number %>" method="POST">
                   <th>
-                    <button id="submit" class="btn btn-sm btn-primary" type="submit">Book Ticket</button>
+                    <button id="submit" class="btn btn-sm btn-primary" onclick="book()" type="submit">Book Ticket</button>
                   </th>
                 </form>
               </tr>
@@ -259,6 +259,10 @@
 
         document.getElementById("source").value = destination;
         document.getElementById("destination").value = source;
+      }
+
+      function book(){
+        alert("MESSAGE  FROM TRAVEL SERVICES :-"+ "\n" + "\n" +"Bus Ticket Booked Sucessfully");
       }
     </script>
 

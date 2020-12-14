@@ -129,7 +129,7 @@
                         </ul>
                             <!-- <button type="button" class="gfgselect btn  float-left btn-secondary" data-toggle="modal" data-target="#exampleModal" style="width: 40%;">View</button> -->
                             <form action="/tour_booking/<%= tours[i].tour_id %>" method="POST">
-                              <button type="submit" class="btn  btn-primary"  style="width: 40%;">Book</button>
+                              <button type="submit" class="btn  btn-primary" onclick="book()"  style="width: 40%;">Book</button>
                             </form>
                     </div>
                 </div>
@@ -213,6 +213,10 @@
               document.getElementById("details").innerHTML = document.getElementById("description").innerHTML;
                     });
                 });
+
+                function book(){
+                    alert("MESSAGE  FROM TRAVEL SERVICES :-"+ "\n" + "\n" +"Tour Ticket Booked Sucessfully");
+                  }
             
           </script>
 
