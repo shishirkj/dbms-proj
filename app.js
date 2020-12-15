@@ -475,7 +475,7 @@ app.post("/tour_booking/:tourId", (req, res) => {
                                 [ticketId, userData, "NOW()", null, tourId, people, total_price]);
             console.log(sql);
             pool.executeQuery(sql, function(err, result) {
-                var sql = "update tours set seats_available = seats_available - " + parseInt(people);
+                var sql = "update tours set seats_available = seats_available - " + parseInt(people) + " where tour_id='" + tourId +"'";
                 console.log(sql);
                 pool.executeQuery(sql, function(e, r) {
                     res.redirect("/bookTours");
