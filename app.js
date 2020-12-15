@@ -86,12 +86,11 @@ app.post("/login", (req, res) => {
     }
 
     // select * from user where email='athish@gmail.com'
-    var sql = sqlhelper.selectCommand("user", null, "email='" + email + "'");
+    var sql = sqlhelper.selectCommand("user", null, "email='" + email + "'" +" and password='" + password +"'");
     console.log(sql);
 
     pool.executeQuery(sql, function(err, result) {
         if(result.length>0) {
-            if(password===result[0].password) {
                 console.log("Login Successful");
                 userData = result[0].user_id;
                 var username = result[0].fname;
@@ -107,15 +106,8 @@ app.post("/login", (req, res) => {
                     res.render("homePage", {userData, username, tours});
                 });
 
-            } else {
-                message = "Email and password doesnt match";
-                req.flash('message',message);
-                res.redirect("/");
-                console.log("Email and password doesnt match");
-                console.log(req.flash('message'));
-            }
         } else {
-            message = "Email does not exist";
+            message = "Email and password are not matching.Try again";
             req.flash('message',message);
             res.redirect("/");
             console.log("Email doesnt exist does");
