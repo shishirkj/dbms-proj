@@ -302,10 +302,10 @@ app.get("/addBus", (req, res) => {
 // Opens add tours form
 
 app.get("/addTours", (req, res) => {
-    // select t.*, group_concat(l.locations separator ' ') as places 
+    // select t.*, group_concat(l.locations separator ', ') as places 
             // from tours t,tour_locations l where t.tour_id=l.tour_id group by l.tour_id
     var sql = sqlhelper.selectCommand("tours t,tour_locations l", 
-                                ["t.*", "t.start_date as extra", "group_concat(l.locations separator '\n') as places"], 
+                                ["t.*", "t.start_date as extra", "group_concat(l.locations separator ', ') as places"], 
                                 "t.tour_id=l.tour_id group by l.tour_id");
     console.log(sql);
     pool.executeQuery(sql, function(err, data) {

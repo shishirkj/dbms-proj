@@ -42,77 +42,85 @@
     <!-- display tables -->
       <div class="container" style="margin-top: 80px;">
 
-        <h2>Booked Tickets</h2>
+        <h2>Booked Bus Tickets</h2>
         <br>
 
-          <table class="table table-bordered">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Ticket Id</th>
-                <th scope="col">Bus No</th>
-                <th scope="col">Agency Name</th>
-                <th scope="col">Source</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Date of Booking</th>
-                <th scope="col">Number of Seats Booked</th>
-                <th scope="col">Total Price</th>
-              </tr>
-            </thead>
+          <% if(bus_result.length==0){ %>
+            <h3>You haven't booked any Bus Tickets!</h3>
+          <% } else { %>
+            <table class="table table-bordered">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Ticket Id</th>
+                  <th scope="col">Bus No</th>
+                  <th scope="col">Agency Name</th>
+                  <th scope="col">Source</th>
+                  <th scope="col">Destination</th>
+                  <th scope="col">Date of Booking</th>
+                  <th scope="col">Number of Seats Booked</th>
+                  <th scope="col">Total Price</th>
+                </tr>
+              </thead>
 
 
-            <tbody>
-              <% for(let i=0;i<bus_result.length; i++){ %>
-              <tr>
-                <th><%= bus_result[i].ticket_id %></th>
-                <th><%= bus_result[i].bus_number %></th>
-                <th><%= bus_result[i].agency_name %></th>
-                <th><%= bus_result[i].source %></th>
-                <th><%= bus_result[i].destination %></th>
-                <th><%= bus_result[i].date_of_booking %></th>
-                <th><%= bus_result[i].no_of_people %></th>
-                <th><%= bus_result[i].total_price %></th>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
+              <tbody>
+                <% for(let i=0;i<bus_result.length; i++){ %>
+                <tr>
+                  <th><%= bus_result[i].ticket_id %></th>
+                  <th><%= bus_result[i].bus_number %></th>
+                  <th><%= bus_result[i].agency_name %></th>
+                  <th><%= bus_result[i].source %></th>
+                  <th><%= bus_result[i].destination %></th>
+                  <th><%= bus_result[i].date_of_booking %></th>
+                  <th><%= bus_result[i].no_of_people %></th>
+                  <th><%= bus_result[i].total_price %></th>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+            <% } %>
 
           <br>
           <hr>
           <br>
 
-          <h2>Booked Tours</h2>
+          <h2>Booked Tours Packages</h2>
           <br>
 
-          <table class="table table-bordered">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Ticket Id</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Journey Starts On</th>
-                <th scope="col">Days</th>
-                <th scope="col">Nights</th>
-                <th scope="col">Date of Booking</th>
-                <th scope="col">Number of Seats Booked</th>
-                <th scope="col">Total Price</th>
-              </tr>
-            </thead>
+          <% if(tour_result.length==0){ %>
+            <h3>You haven't booked any Tour Packages!</h3>
+          <% } else { %>
+            <table class="table table-bordered">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">Ticket Id</th>
+                  <th scope="col">Destination</th>
+                  <th scope="col">Journey Starts On</th>
+                  <th scope="col">Days</th>
+                  <th scope="col">Nights</th>
+                  <th scope="col">Date of Booking</th>
+                  <th scope="col">Number of Seats Booked</th>
+                  <th scope="col">Total Price</th>
+                </tr>
+              </thead>
 
 
-            <tbody>
-              <% for(let i=0;i<tour_result.length; i++){ %>
-              <tr>
-                <th><%= tour_result[i].ticket_id %></th>
-                <th><%= tour_result[i].source %></th>
-                <th><%= tour_result[i].start_date %></th>
-                <th><%= tour_result[i].no_of_days %></th>
-                <th><%= tour_result[i].no_of_nights %></th>
-                <th><%= tour_result[i].date_of_booking %></th>
-                <th><%= tour_result[i].no_of_people %></th>
-                <th><%= tour_result[i].total_price %></th>
-              </tr>
-              <% } %>
-            </tbody>
-          </table>
+              <tbody>
+                <% for(let i=0;i<tour_result.length; i++){ %>
+                <tr>
+                  <th><%= tour_result[i].ticket_id %></th>
+                  <th><%= tour_result[i].source %></th>
+                  <th><%= tour_result[i].start_date %></th>
+                  <th><%= tour_result[i].no_of_days %></th>
+                  <th><%= tour_result[i].no_of_nights %></th>
+                  <th><%= tour_result[i].date_of_booking %></th>
+                  <th><%= tour_result[i].no_of_people %></th>
+                  <th><%= tour_result[i].total_price %></th>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          <% } %>
 
 
       </div>
