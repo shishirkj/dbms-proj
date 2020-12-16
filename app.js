@@ -426,32 +426,79 @@ app.post("/bus_booking/:busNo", (req, res) => {
     busNo = req.params.busNo;
     people = 1;
 
-    // select * from bus where bus_number='busNo'
-    var sql = sqlhelper.selectCommand("bus", null, "bus_number='" + busNo + "'");
+
+    //  select * from tickets where bus_number='BEN601' and date_of_booking=CURDATE() and user_id='7';
+    var sql = sqlhelper.selectCommand("tickets", null, "bus_number='" + busNo 
+                                    + "' and date_of_booking=CURDATE() and user_id='" + userData + "'");
     console.log(sql);
 
     pool.executeQuery(sql, function(err, result) {
-        if(result.length>0) {
-            total_price = result[0].fare*people;
-            var ticketId = result[0].source.slice(0,2).toUpperCase()
-                            + result[0].destination.slice(0,2).toUpperCase() 
-                            + Number(Math.floor(Math.random() * 8999) + 1001);
 
-            // insert into tickets values ('ticketId', 'userData', NOW(), 'busNo', null, 'people', 'total_price')
-            var sql = sqlhelper.insertCommand("tickets", 
-                                [ticketId, userData, "NOW()", busNo, null, people, total_price]);
-            console.log(sql);
-            pool.executeQuery(sql, function(err, result) {
-                var sql = "update bus set seats_available = seats_available - " + parseInt(people);
-                console.log(sql);
+        // select * from bus where bus_number='busNo'
+        var sql = sqlhelper.selectCommand("bus", null, "bus_number='" + busNo + "'");
+        console.log(sql);
+
+        pool.executeQuery(sql, function(err, bus_result) {
+
+            // Update tickets if already booked on that day
+
+            if (result.length>0) {
+                // update tickets set no_of_people = no_of_people + 1 where ticket_id='BEMY4029';
+                var sql = "update tickets set no_of_people = no_of_people + " + parseInt(people)
+                                                + " where ticket_id='" + result[0].ticket_id +"';"
+
+                // update tickets set total_price = total_price + 540 where ticket_id='BEMY4029';
+                sql += "update tickets set total_price = total_price + " 
+                                                + (parseInt(bus_result[0].fare) * parseInt(people))
+                                                + " where ticket_id='" + result[0].ticket_id +"';"
+                                                
+                console.log(sql)
+
                 pool.executeQuery(sql, function(e, r) {
-                    res.redirect("/bookTickets");
+                    // update bus set seats_available = seats_available - 1 where bus_number='BEN601';
+                    var sql = "update bus set seats_available = seats_available - " + parseInt(people)
+                                                + " where bus_number='" + busNo +"'";
+                    console.log(sql);
+
+                    pool.executeQuery(sql, function(e, r) {
+                        res.redirect("/bookTickets");
+                    });
                 });
-            });
-        }
+            }
+
+
+            // Insert new ticket data
+
+            else {
+                total_price = bus_result[0].fare*people;
+                var ticketId = bus_result[0].source.slice(0,2).toUpperCase()
+                                + bus_result[0].destination.slice(0,2).toUpperCase() 
+                                + Number(Math.floor(Math.random() * 8999) + 1001);
+
+                // insert into tickets values ('ticketId', 'userData', NOW(), 'busNo', null, 'people', 'total_price')
+                var sql = sqlhelper.insertCommand("tickets", 
+                                    [ticketId, userData, "NOW()", busNo, null, people, total_price]);
+                console.log(sql);
+                pool.executeQuery(sql, function(err, result) {
+                    // update bus set seats_available = seats_available - 1 where bus_number='BEN601'
+                    var sql = "update bus set seats_available = seats_available - " + parseInt(people)
+                                        + " where bus_number='" + busNo +"'";
+                    console.log(sql);
+                    pool.executeQuery(sql, function(e, r) {
+                        res.redirect("/bookTickets");
+                    });
+                });
+            }
+
+        })
+        
     });
 
 })
+
+
+
+
 
 
 
@@ -461,27 +508,65 @@ app.post("/tour_booking/:tourId", (req, res) => {
     tourId = req.params.tourId;
     people = 1;
 
-    // select * from tours where tour_id='tourId'
-    var sql = sqlhelper.selectCommand("tours", null, "tour_id='" + tourId + "'");
+
+    //  select * from tickets where tour_id='TIRU2006' and date_of_booking=CURDATE() and user_id='7';
+    var sql = sqlhelper.selectCommand("tickets", null, "tour_id='" + tourId 
+                                    + "' and date_of_booking=CURDATE() and user_id='" + userData + "'");
     console.log(sql);
 
     pool.executeQuery(sql, function(err, result) {
-        if(result.length>0) {
-            total_price = result[0].price*people;
-            var ticketId = result[0].source.slice(0,4).toUpperCase()
-                            + Number(Math.floor(Math.random() * 8999) + 1001);
-            // insert into tickets values ('ticketId', 'userData', NOW(), null, 'tourId', 'people', 'total_price')
-            var sql = sqlhelper.insertCommand("tickets", 
-                                [ticketId, userData, "NOW()", null, tourId, people, total_price]);
-            console.log(sql);
-            pool.executeQuery(sql, function(err, result) {
-                var sql = "update tours set seats_available = seats_available - " + parseInt(people) + " where tour_id='" + tourId +"'";
-                console.log(sql);
+        // select * from tours where tour_id='tourId'
+        var sql = sqlhelper.selectCommand("tours", null, "tour_id='" + tourId + "'");
+        console.log(sql);
+
+        pool.executeQuery(sql, function(err, tour_result) {
+            // Increment ticket count
+            if(result.length>0) {
+                // update tickets set no_of_people = no_of_people + 1 where ticket_id='TIRU4029';
+                var sql = "update tickets set no_of_people = no_of_people + " + parseInt(people)
+                                    + " where ticket_id='" + result[0].ticket_id +"';"
+
+                // update tickets set total_price = total_price + 540 where ticket_id='TIRU4029';
+                sql += "update tickets set total_price = total_price + " 
+                                + (parseInt(tour_result[0].price) * parseInt(people))
+                                + " where ticket_id='" + result[0].ticket_id +"';"
+                                
+                console.log(sql)
+
                 pool.executeQuery(sql, function(e, r) {
-                    res.redirect("/bookTours");
+                    // update tours set seats_available = seats_available - 1 where tour_id='TIRU6301';
+                    var sql = "update tours set seats_available = seats_available - " + parseInt(people) 
+                                            + " where tour_id='" + tourId +"'";
+                    console.log(sql);
+
+                    pool.executeQuery(sql, function(e, r) {
+                        res.redirect("/bookTours");
+                    });
                 });
-            });
-        }
+            }
+
+            // Insert new ticket
+            else {
+                total_price = tour_result[0].price*people;
+                var ticketId = tour_result[0].source.slice(0,4).toUpperCase()
+                                + Number(Math.floor(Math.random() * 8999) + 1001);
+                // insert into tickets values ('ticketId', 'userData', NOW(), null, 'tourId', 'people', 'total_price')
+                var sql = sqlhelper.insertCommand("tickets", 
+                                    [ticketId, userData, "NOW()", null, tourId, people, total_price]);
+                console.log(sql);
+
+                pool.executeQuery(sql, function(err, result) {
+                    // update tours set seats_available = seats_available - 1 where tour_id='TIRU6301';
+                    var sql = "update tours set seats_available = seats_available - " + parseInt(people) 
+                                            + " where tour_id='" + tourId +"'";
+                    console.log(sql);
+
+                    pool.executeQuery(sql, function(e, r) {
+                        res.redirect("/bookTours");
+                    });
+                });
+            }
+        });
     });
 
 })
