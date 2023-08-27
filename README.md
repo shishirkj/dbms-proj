@@ -1,1 +1,1 @@
-Travel service management 
+TravelEase-Travel Agency service management system
