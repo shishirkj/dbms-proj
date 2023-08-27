@@ -47,7 +47,7 @@
               <th scope="col">Source</th>
               <th scope="col">Departure Time</th>
               <th scope="col">Destination</th>
-              <th scope="col">Arraival Time</th>
+              <th scope="col">Arrival Time</th>
               <th scope="col">Price</th>
               <th scope="col">Seats Available</th>
               <th scope="col"></th>
@@ -64,7 +64,7 @@
                 <th class="source"><%= data[i].source %></th>
                 <th class="departureTime"><%= data[i].departure_time %></th>
                 <th class="destination"><%= data[i].destination %></th>
-                <th class="arraivalTime"><%= data[i].arrival_time %></th>
+                <th class="arrivalTime"><%= data[i].arrival_time %></th>
                 <th class="price"><%= data[i].fare %></th>
                 <th class="seatsAvailable"><%= data[i].seats_available %></th>
                 <th><button class="gfgselect btn-secondary" data-toggle="modal" data-target="#staticBackdrop">EDIT</button></th>
@@ -129,9 +129,9 @@
                     </div>
 
                     <div class="form-group row">
-                      <label for="name" class="col-sm-4 col-form-label">Arraival Time</label>
+                      <label for="name" class="col-sm-4 col-form-label">Arrival Time</label>
                       <div class="col-sm-8">
-                        <input type="time"  class="form-control" name="arraivalTime" id="ArraivalTime" required>
+                        <input type="time"  class="form-control" name="arrivalTime" id="ArrivalTime" required>
                       </div>
                     </div>
 
@@ -254,9 +254,9 @@
                     </div>
 
                     <div class="form-group row">
-                      <label for="name" class="col-sm-4 col-form-label">Arraival Time</label>
+                      <label for="name" class="col-sm-4 col-form-label">Arrival Time</label>
                       <div class="col-sm-8">
-                        <input autocomplete="false" type="time"  class="form-control" name="arraivalTime" id="ArraivalTime" required>
+                        <input autocomplete="false" type="time"  class="form-control" name="arrivalTime" id="ArrivalTime" required>
                       </div>
                     </div>
 
@@ -294,18 +294,18 @@
           var source = $(this).parents("tr").find(".source").text(); 
           var departureTime = $(this).parents("tr").find(".departureTime").text(); 
           var destination = $(this).parents("tr").find(".destination").text(); 
-          var arraivalTime =  $(this).parents("tr").find(".arraivalTime").text(); 
+          var arrivalTime =  $(this).parents("tr").find(".arrivalTime").text(); 
           var price = $(this).parents("tr").find(".price").text(); 
           var agencyId = $(this).parents("tr").find(".agencyName").text(); 
           var seatsAvailable = $(this).parents("tr").find(".seatsAvailable").text(); 
 
-          //console.log(busNo+source+departureTime+destination+arraivalTime+price+agencyId);
+          //console.log(busNo+source+departureTime+destination+arrivalTime+price+agencyId);
 
             document.getElementById("BusNo").value = busNo;
             document.getElementById("Source").value = source;
             document.getElementById("DepartureTime").value = departureTime;
             document.getElementById("Destination").value = destination;
-            document.getElementById("ArraivalTime").value = arraivalTime;
+            document.getElementById("ArrivalTime").value = arrivalTime;
             document.getElementById("Price").value = price;
             document.getElementById("AgencyId").value = agencyId;
             document.getElementById("SeatsAvailable").value = seatsAvailable;

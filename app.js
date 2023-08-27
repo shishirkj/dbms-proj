@@ -85,7 +85,7 @@ app.post("/login", (req, res) => {
         return;
     }
 
-    // select * from user where email='athish@gmail.com'
+   
     var sql = sqlhelper.selectCommand("user", null, "email='" + email + "'" +" and password='" + password +"'");
     console.log(sql);
 
@@ -122,7 +122,7 @@ app.post("/login", (req, res) => {
 app.post("/register",(req, res) => {
     const {firstName,lastName,email,password,phoneNumber} = req.body;
 
-    // select * from user where email='athish@gmail.com'
+    // select * from user where email='bhojappa@gmail.com'
     var sql = sqlhelper.selectCommand("user", null, "email='" + email + "'");
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
@@ -131,7 +131,7 @@ app.post("/register",(req, res) => {
             var message = "Email already exists. Try login";
             res.redirect("/");
         } else {
-            // insert into user values (null, 'Athish Venkatesh', 'athish@gmail.com', '123', '9999999999')
+            // insert into user values (null, 'Bhojappa', 'bhojappa@gmail.com', '123', '9999999999')
             var sql = sqlhelper.insertCommand("user", [null, firstName, lastName, email, password, phoneNumber]);
             console.log(sql);
             pool.executeQuery(sql, function(err, result) {});
@@ -337,7 +337,7 @@ app.get("/addAgency", (req, res) => {
 // Add new bus to the bus table
 
 app.post("/addBus", (req, res) => {
-    const  {agencyId, source, destination, departureTime, arraivalTime, price, seats_available} = req.body;
+    const  {agencyId, source, destination, departureTime, arrivalTime, price, seats_available} = req.body;
     console.log(agencyId);
     
     var busNo = agencyId.slice(0,3).toUpperCase() + Number(Math.floor(Math.random() * 899) + 101);
@@ -347,7 +347,7 @@ app.post("/addBus", (req, res) => {
                             // 'destination', 'arraivalTime', 12, 'agencyId', 34)
     var sql = sqlhelper.insertCommand("bus (bus_number, source, departure_time, " +
                             "destination, arrival_time, fare, agency_id, seats_available)", [busNo, source, departureTime, destination, 
-                            arraivalTime, parseInt(price), agencyId.substring(0,5), parseInt(seats_available)]);
+                            arrivalTime, parseInt(price), agencyId.substring(0,5), parseInt(seats_available)]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         res.redirect("/addBus");
@@ -362,14 +362,14 @@ app.post("/addBus", (req, res) => {
 // Add new tour to the tour table
 
 app.post("/addTours", (req, res) => {
-    const {from, placeIncluded, description, image, noOfDays, noOfNights, price, seatsAvailable, startsOn} = req.body;
+    const {from, placeIncluded, description, noOfDays, noOfNights, price, seatsAvailable, startsOn} = req.body;
 
     var tourId = from.slice(0,3).toUpperCase() + noOfDays + Number(Math.floor(Math.random() * 89) + 11);
     if(tourId.length>6) 
         tourId = tourId.slice(0,6);
 
     // insert into tours values ('tourId', 'from', 'description', 'image', 2, 3, 4, 20)
-    var sql = sqlhelper.insertCommand("tours", [tourId, from, description, image,
+    var sql = sqlhelper.insertCommand("tours", [tourId, from, description,
                     parseInt(noOfDays), parseInt(noOfNights), parseInt(price), parseInt(seatsAvailable), startsOn]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
@@ -627,14 +627,14 @@ app.post("/agencydelete/:id", (req, res) => {
 // Update Bus
 
 app.post("/updateBus", (req, res) => {
-    const  {busNo, agencyId, source, destination, departureTime, arraivalTime, price, seats_available} = req.body;
+    const  {busNo, agencyId, source, destination, departureTime, arrivalTime, price, seats_available} = req.body;
     // update bus set source='source', departure_time='departure_time', 
             // destination='destination', arrival_time='arrival_time', fare='fare', 
             // agency_id='agency_id', seats_available='seats_available' 
             // where bus_number='bunNo'
     var sql = sqlhelper.updateCommand("bus", 
         ["source", "departure_time", "destination", "arrival_time", "fare", "seats_available"], 
-        [source, departureTime, destination, arraivalTime, parseInt(price), parseInt(seats_available)], 
+        [source, departureTime, destination, arrivalTime, parseInt(price), parseInt(seats_available)], 
         ["bus_number"], [busNo]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
@@ -648,14 +648,14 @@ app.post("/updateBus", (req, res) => {
 // Update Tours
 
 app.post("/updateTours", (req, res) => {
-    const {tourId, from, placeIncluded, description, image, noOfDays, noOfNights, 
+    const {tourId, from, placeIncluded, description,noOfDays, noOfNights, 
                     price, seatsAvailable, startsOn} = req.body;
     // update tours set source='source', description='description', images='images', 
             // no_of_days='no_of_days', no_of_nights='no_of_nights', price='price', 
             // seats_available='seats_available' where tour_id='tourId'
     var sql = sqlhelper.updateCommand("tours", 
-        ["source", "description", "images", "no_of_days", "no_of_nights", "price", "seats_available", "start_date"], 
-        [from, description, image, noOfDays, noOfNights, price, seatsAvailable, startsOn], ["tour_id"], [tourId]);
+        ["source", "description", "no_of_days", "no_of_nights", "price", "seats_available", "start_date"], 
+        [from, description, noOfDays, noOfNights, price, seatsAvailable, startsOn], ["tour_id"], [tourId]);
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
         // delete from tour_locations where tour_id='tourId'

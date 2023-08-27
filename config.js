@@ -3,10 +3,26 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "9380537486",
-    database: "dbms_project",
-    multipleStatements: true
+    password: "1234",
+    database: "travels_services",
+      multipleStatements: true
 });
+
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "1234",
+    database: "travels_services",
+    multipleStatements: true
+})
+
+con.connect(function(err) {
+    if (err) {
+        console.log(err)
+    } else {
+        console.log("database Connected")
+    }
+})
 
 module.exports = {
     executeQuery : function(query, callback) {

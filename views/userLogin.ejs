@@ -20,7 +20,8 @@
 	<input autocomplete="false" type="email" name="email" placeholder="Email" required>
 	<input autocomplete="false" type="password" name="password" placeholder="Password"  minlength="8" required>
 	<span>(password should consist of min 8 characters)</span>
-	<input autocomplete="false" type="tel" name="phoneNumber" placeholder="Contact Number" required>
+	<input autocomplete="false" type="tel" name="phoneNumber" placeholder="Contact Number" pattern="[0-9]{10}" required>
+	<span>(contact number should consist of 10 numbers)</span>
 	<br>
 	<span style="color: red;"><%= message %></span>
 	<button type="submit" >Sign up</button>

@@ -47,7 +47,7 @@
               <th scope="col">Date of Journey</th>
               <th scope="col">Places Included</th>
               <th scope="col">Description</th>
-              <th scope="col">Image</th>
+             
               <th scope="col">No Of Days</th>
               <th scope="col">No Of Nights</th>
               <th scope="col">Price</th>
@@ -66,7 +66,7 @@
                 <th class="startsOn" style="display: none"><%= data[i].extra %></th>
                 <th class="placeIncluded"><%= data[i].places %></th>
                 <th class="description"><%= data[i].description %></th>
-                <th class="image"><%= data[i].images %></th>
+               
                 <th class="noOfDays"><%= data[i].no_of_days %></th>
                 <th class="noOfNights"><%= data[i].no_of_nights %></th>
                 <th class="price"><%= data[i].price %></th>
@@ -137,12 +137,12 @@
                       </div>
                     </div>
 
-                    <div class="form-group row">
+                    <!--<div class="form-group row">
                       <label for="from" class="col-sm-4 col-form-label">Image</label>
                       <div class="col-sm-8">
                         <input readonly type="text"   class="form-control" name="image" id="Image" >
                       </div>
-                    </div>
+                    </div>-->
 
                     <div class="form-group row">
                       <label for="name" class="col-sm-4 col-form-label">No Of Days</label>
@@ -217,7 +217,7 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Add New Bus</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">Add New Tour</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -262,12 +262,7 @@
                     </div>
                   </div>
 
-                  <div class="form-group row">
-                    <label for="from" class="col-sm-4 col-form-label">Image</label>
-                    <div class="col-sm-8">
-                      <input autocomplete="false" type="file"   class="form-control" name="image" id="Image" required>
-                    </div>
-                  </div>
+                 
 
                   <div class="form-group row">
                     <label for="name" class="col-sm-4 col-form-label">No Of Days</label>
@@ -277,7 +272,7 @@
                   </div>
 
                   <div class="form-group row">
-                    <label for="to" class="col-sm-4 col-form-label">No Of Nigths</label>
+                    <label for="to" class="col-sm-4 col-form-label">No Of Nights</label>
                     <div class="col-sm-8">
                       <input autocomplete="false" type="tel" class="form-control" name="noOfNights" id="NoOfNights" required>
                     </div>
@@ -320,7 +315,7 @@
           var startsOn = $(this).parents("tr").find(".startsOn").text();
           var placeIncluded = $(this).parents("tr").find(".placeIncluded").text();
           var description = $(this).parents("tr").find(".description").text();
-          var image = $(this).parents("tr").find(".image").text();
+          
           var noOfDays = $(this).parents("tr").find(".noOfDays").text();
           var noOfNights = $(this).parents("tr").find(".noOfNights").text();
           var price = $(this).parents("tr").find(".price").text();
@@ -331,7 +326,7 @@
           document.getElementById("StartsOn").value = startsOn;
           document.getElementById("PlaceIncluded").value = placeIncluded;
           document.getElementById("Description").value = description;
-          document.getElementById("Image").value = image;
+          
           document.getElementById("NoOfDays").value = noOfDays;
           document.getElementById("NoOfNights").value = noOfNights;
           document.getElementById("Price").value = price;
@@ -347,7 +342,7 @@
           }
 
           function update() {
-            alert("MESSAGE FROM TRAVEL SERVICE" + "\n" + "\n" + "Tous data was updated ");
+            alert("MESSAGE FROM TRAVEL SERVICE" + "\n" + "\n" + "Tours data was updated ");
           }
 
            
