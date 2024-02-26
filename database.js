@@ -61,7 +61,7 @@ module.exports = {
         return sql;
     },
 
-
+//converts from yyy-mm-dd to like feb 26 2024
     getDateHelper : function(result, date_type) {
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
         result.forEach(element => {
@@ -75,6 +75,7 @@ module.exports = {
     },
 
 
+    //it converts in format yyy-mm-dd
     getShortenedDate : function(result, date_type) {
         // 2020-12-09T18:30:00.000Z
         result.forEach(element => {

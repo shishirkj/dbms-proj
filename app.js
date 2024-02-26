@@ -50,6 +50,7 @@ app.post("/login", (req, res) => {
 
     if(sqlhelper.isAdmin(email,password)) {
         console.log("Welcome admin");
+        //checks date_of_booking in tickets and returns two column x(booking_date) and y(no_of_booking that day)
         var sql = "select distinct t.date_of_booking as x, "
                     + "(case when isnull(c.count) then 0 else c.count end) as y from tickets t "
                     + "left join (select t1.date_of_booking as x1, count(*) as count from tickets t1 "
@@ -57,6 +58,7 @@ app.post("/login", (req, res) => {
                     + "on t.date_of_booking=c.x1 order by t.date_of_booking";
         console.log(sql);
 
+        //number of bookings each date
         pool.executeQuery(sql, function(err, bus) {
             var sql = "select distinct t.date_of_booking as x, "
                         + "(case when isnull(c.count) then 0 else c.count end) as y from tickets t "
@@ -65,6 +67,7 @@ app.post("/login", (req, res) => {
                         + "on t.date_of_booking=c.x1 order by t.date_of_booking";
             console.log(sql);
 
+        //from travel_agency and bus table it gives x{agency name} and y(bus count)
             pool.executeQuery(sql, function(e, tour) {
                 var sql = "select t.agency_name as x, (case when isnull(b.y) then 0 else b.y end) as y "
                             + "from travel_agency t left join "
@@ -90,19 +93,21 @@ app.post("/login", (req, res) => {
     console.log(sql);
 
     pool.executeQuery(sql, function(err, result) {
+       
         if(result.length>0) {
                 console.log("Login Successful");
                 userData = result[0].user_id;
                 var username = result[0].fname;
 
-                // select * from tours where start_date>'2020-12-31' order by price desc limit 3;
+                // select * from tours where start_date>'2024-02-20' order by price desc limit 3;
                 var today = new Date();
                 today = today.getFullYear() + "-" 
                         + String(today.getMonth()+1).padStart(2,'0') + "-" + String(today.getDate()).padStart(2,'0');
                 var sql = sqlhelper.selectCommand("tours", null, 
                                 "start_date>'" + today + "' order by price desc limit 3");
+                                console.log("sql!!!",sql);
                 pool.executeQuery(sql, function(err, tours) {
-                   console.log(tours);
+                  
                     res.render("homePage", {userData, username, tours});
                 });
 
@@ -122,7 +127,7 @@ app.post("/login", (req, res) => {
 app.post("/register",(req, res) => {
     const {firstName,lastName,email,password,phoneNumber} = req.body;
 
-    // select * from user where email='bhojappa@gmail.com'
+    // select * from user where email='shishir@gmail.com'
     var sql = sqlhelper.selectCommand("user", null, "email='" + email + "'");
     console.log(sql);
     pool.executeQuery(sql, function(err, result) {
@@ -131,7 +136,6 @@ app.post("/register",(req, res) => {
             var message = "Email already exists. Try login";
             res.redirect("/");
         } else {
-            // insert into user values (null, 'Bhojappa', 'bhojappa@gmail.com', '123', '9999999999')
             var sql = sqlhelper.insertCommand("user", [null, firstName, lastName, email, password, phoneNumber]);
             console.log(sql);
             pool.executeQuery(sql, function(err, result) {});
@@ -255,7 +259,7 @@ app.get("/viewTickets/:userData", (req, res) => {
         // where user_id=id and t.bus_number=b.bus_number and b.agency_id=a.agency_id
     var sql = sqlhelper.selectCommand("tickets t, bus b, travel_agency a", 
                     ["t.*", "b.source", "b.destination", "a.agency_name"], 
-                        "user_id=" + userData + " and t.bus_number=b.bus_number and b.agency_id=a.agency_id" +
+                        "user_id=" + 1 + " and t.bus_number=b.bus_number and b.agency_id=a.agency_id" +
                         " order by date_of_booking");
     console.log(sql);
     pool.executeQuery(sql, function(err, bus_result) {
@@ -362,6 +366,7 @@ app.post("/addBus", (req, res) => {
 // Add new tour to the tour table
 
 app.post("/addTours", (req, res) => {
+   
     const {from, placeIncluded, description, noOfDays, noOfNights, price, seatsAvailable, startsOn} = req.body;
 
     var tourId = from.slice(0,3).toUpperCase() + noOfDays + Number(Math.floor(Math.random() * 89) + 11);
@@ -507,8 +512,7 @@ app.post("/bus_booking/:busNo", (req, res) => {
 app.post("/tour_booking/:tourId", (req, res) => {
     tourId = req.params.tourId;
     people = 1;
-
-
+//CURDATE = current date withoute dash of sql query
     //  select * from tickets where tour_id='TIRU2006' and date_of_booking=CURDATE() and user_id='7';
     var sql = sqlhelper.selectCommand("tickets", null, "tour_id='" + tourId 
                                     + "' and date_of_booking=CURDATE() and user_id='" + userData + "'");
@@ -546,11 +550,17 @@ app.post("/tour_booking/:tourId", (req, res) => {
             }
 
             // Insert new ticket
+            
             else {
+            
+             
                 total_price = tour_result[0].price*people;
+               
+               userData=1
                 var ticketId = tour_result[0].source.slice(0,4).toUpperCase()
                                 + Number(Math.floor(Math.random() * 8999) + 1001);
                 // insert into tickets values ('ticketId', 'userData', NOW(), null, 'tourId', 'people', 'total_price')
+                console.log("Yaha errrorr nahi############")
                 var sql = sqlhelper.insertCommand("tickets", 
                                     [ticketId, userData, "NOW()", null, tourId, people, total_price]);
                 console.log(sql);

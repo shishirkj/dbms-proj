@@ -3,7 +3,7 @@ var mysql = require("mysql");
 var pool = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "1234",
+    password: "sql123",
     database: "travels_services",
       multipleStatements: true
 });
@@ -11,7 +11,7 @@ var pool = mysql.createPool({
 var con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "1234",
+    password: "sql123",
     database: "travels_services",
     multipleStatements: true
 })
