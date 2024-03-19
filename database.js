@@ -43,7 +43,7 @@ module.exports = {
 
 
     isAdmin : function(email, password) {
-        return email==="travelagency@gmail.com" && password==="123";
+        return email==="traveleaze@gmail.com" && password==="123";
     },
 
     

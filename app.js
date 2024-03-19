@@ -122,6 +122,7 @@ app.post("/login", (req, res) => {
 })
 
 
+
 // Insert new user to the user table
 
 app.post("/register",(req, res) => {
@@ -556,7 +557,7 @@ app.post("/tour_booking/:tourId", (req, res) => {
              
                 total_price = tour_result[0].price*people;
                
-               userData=1
+               userData=7
                 var ticketId = tour_result[0].source.slice(0,4).toUpperCase()
                                 + Number(Math.floor(Math.random() * 8999) + 1001);
                 // insert into tickets values ('ticketId', 'userData', NOW(), null, 'tourId', 'people', 'total_price')
@@ -709,6 +710,33 @@ app.post("/UpdateAgency", (req, res) => {
 })
 
 
+
+
+app.get('/feed',(req,res)=>{ 
+    res.render("feedbackForm");
+})
+
+
+app.post('/fbf',(req,res)=>{ 
+
+    const {email,feedback}=req.body;
+    console.log(email,feedback)
+    var sql = sqlhelper.insertCommand("feedbackform", [email,feedback]);
+    console.log(sql);
+    pool.executeQuery(sql, function(err, result) {});
+    pool.executeQuery();
+   res.render('thankyou');
+})
+
+app.get('/adminfeed',(req,res)=>{ 
+    var sql = sqlhelper.selectCommand("feedbackform");
+    pool.executeQuery(sql, function(err, result) {
+        res.render("adminFeedback",{result})
+    });
+    pool.executeQuery();
+    console.log(sql);
+  
+})
 
 
 app.listen(3000,() => {

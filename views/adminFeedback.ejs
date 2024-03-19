@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Table</title>
+    <style>
+        /* Table styles */
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+            white-space: nowrap; /* Prevents wrapping to next line */
+            overflow: hidden; /* Hides overflow */
+            text-overflow: ellipsis; /* Adds ellipsis (...) for overflow */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Container styles */
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+    </style>
+      <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"> </script> 
+</head>
+<body>
+    <div class="container">
+        <h2>User Feedback</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i=0;i<result.length;i++){ %>
+                    <tr>
+                      <td ><%= result[i].email %></td>
+                      <td><%= result[i].feedback %></td>
+                    </tr>
+                  <% } %>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
